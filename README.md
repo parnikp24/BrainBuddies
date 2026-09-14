@@ -2,9 +2,6 @@
 
 > A cozy, youth-centric cognitive architecture simulation designed to make affective neuroscience accessible, transparent, and empathetic for children and teens.
 
-✨ **Live Web Application:** https://github.io
-📂 **Open Source Codebase:** https://github.com
-
 ---
 
 ## 🧸 About Brain Buddies
