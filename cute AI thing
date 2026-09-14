@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Brain Buddies — A Cozy Guide to Your Feelings</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --blush:#fff3f7;
+    --pink:#ffb6c8;
+    --pink-deep:#ff7aa8;
+    --berry:#c9436b;
+    --ink:#5a3d47;
+    --ink-soft:#8a6b74;
+
+    --thalamus:#a7d8ff;   /* sky blue  */
+    --amygdala:#ffb199;   /* coral     */
+    --hippocampus:#bfe8c9;/* mint      */
+    --pfc:#c9b8f2;        /* lavender  */
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    font-family:'Quicksand', sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 12% 8%, rgba(255,182,200,0.35), transparent 45%),
+      radial-gradient(circle at 90% 15%, rgba(201,184,242,0.25), transparent 45%),
+      var(--blush);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.bubbly{ font-family:'Fredoka', sans-serif; }
+
+  /* floating petals */
+  .petal{
+    position:fixed; top:-40px; z-index:0; pointer-events:none;
+    font-size:20px; opacity:0.55;
+    animation: drift linear infinite;
+  }
+  @keyframes drift{
+    0%{ transform:translateY(-5vh) translateX(0) rotate(0deg); opacity:0; }
+    10%{ opacity:0.6; }
+    90%{ opacity:0.5; }
+    100%{ transform:translateY(105vh) translateX(60px) rotate(200deg); opacity:0; }
+  }
+
+  .card{
+    background:#fff;
+    border:3px solid #ffe1ea;
+    border-radius:28px;
+  }
+
+  .brain-float{ animation: bob 3.6s ease-in-out infinite; }
+  @keyframes bob{
+    0%,100%{ transform:translateY(0) rotate(-2deg); }
+    50%{ transform:translateY(-14px) rotate(2deg); }
+  }
+
+  .glow-ring{ transition: box-shadow 500ms ease, border-color 500ms ease; }
+
+  .chip{
+    background:#fff0f5; border:2px solid #ffd6e4; color:var(--berry);
+    transition: transform 120ms ease, background 120ms ease;
+  }
+  .chip:hover{ background:#ffe1ea; transform: translateY(-1px); }
+
+  .send-btn{
+    background: linear-gradient(135deg, var(--pink-deep), #ff97b8);
+    color:#fff; font-weight:600;
+    transition: transform 120ms ease, filter 120ms ease;
+  }
+  .send-btn:hover{ filter:brightness(1.07); }
+  .send-btn:active{ transform: scale(0.97); }
+  .send-btn:disabled{ opacity:0.5; }
+
+  .bubble{
+    animation: pop-in 260ms ease-out;
+    border-radius:20px;
+    border-width:2px;
+  }
+  @keyframes pop-in{
+    from{ opacity:0; transform: translateY(8px) scale(0.98); }
+    to{ opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  #chat-log{ scrollbar-width:thin; scrollbar-color: #ffd6e4 transparent; }
+  #chat-log::-webkit-scrollbar{ width:6px; }
+  #chat-log::-webkit-scrollbar-thumb{ background:#ffd6e4; border-radius:10px; }
+
+  details > summary{ cursor:pointer; list-style:none; }
+  details > summary::-webkit-details-marker{ display:none; }
+  details[open] .chev{ transform: rotate(180deg); }
+  .chev{ transition: transform 200ms ease; }
+
+  @media (prefers-reduced-motion: reduce){
+    .petal, .brain-float{ animation:none !important; }
+  }
+</style>
+</head>
+
+<body class="relative">
+
+<!-- floating flower petals, purely decorative -->
+<div class="petal" style="left:8%;  animation-duration:14s; animation-delay:0s;">🌸</div>
+<div class="petal" style="left:28%; animation-duration:18s; animation-delay:3s;">🌷</div>
+<div class="petal" style="left:52%; animation-duration:12s; animation-delay:1s;">🌼</div>
+<div class="petal" style="left:74%; animation-duration:16s; animation-delay:5s;">🌸</div>
+<div class="petal" style="left:90%; animation-duration:15s; animation-delay:2s;">🌷</div>
+
+<div class="relative z-10 max-w-3xl mx-auto px-5 py-8">
+
+  <!-- ============ HERO ============ -->
+  <header class="text-center card p-8 mb-6">
+    <div id="brain-buddy" class="brain-float glow-ring inline-flex items-center justify-center w-28 h-28 rounded-full mx-auto mb-3 border-4"
+         style="background:#fff0f5; border-color:#ffd6e4;">
+      <svg viewBox="0 0 100 100" class="w-20 h-20">
+        <circle cx="50" cy="52" r="34" fill="#ffd6e4"/>
+        <path d="M22 46 Q30 30 50 32 Q70 30 78 46 Q80 58 70 62 Q66 70 56 68 Q50 74 44 68 Q34 70 30 62 Q20 58 22 46 Z"
+              fill="none" stroke="#ff9dbb" stroke-width="2.5" opacity="0.7"/>
+        <circle cx="38" cy="52" r="4.5" fill="#7a4a58"/>
+        <circle cx="62" cy="52" r="4.5" fill="#7a4a58"/>
+        <circle cx="30" cy="60" r="6" fill="#ffb3c6" opacity="0.7"/>
+        <circle cx="70" cy="60" r="6" fill="#ffb3c6" opacity="0.7"/>
+        <path d="M42 63 Q50 70 58 63" fill="none" stroke="#7a4a58" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-semibold text-[var(--berry)]">Brain Buddies</h1>
+    <p class="text-sm md:text-base text-[var(--ink-soft)] mt-2 max-w-md mx-auto">
+      Four little helpers live inside your head. Tell them how you're feeling,
+      and they'll walk you through it — together.
+    </p>
+    <p id="status-line" class="bubbly text-xs text-[var(--pink-deep)] mt-3">🌱 waiting for you to share something!</p>
+  </header>
+
+  <!-- ============ INPUT ============ -->
+  <section class="card p-5 mb-6">
+    <div class="flex flex-col sm:flex-row gap-3">
+      <input id="feeling-input" type="text" maxlength="180"
+        placeholder="Type how you're feeling, like: I just did bad on a math test..."
+        class="flex-1 bg-[#fff8fa] border-2 border-[#ffd6e4] rounded-2xl px-4 py-3 text-sm placeholder-[#c98ba1] focus:outline-none focus:border-[var(--pink-deep)]" />
+      <button id="send-btn" class="send-btn rounded-2xl px-6 py-3 text-sm whitespace-nowrap">Ask My Brain Buddies 💌</button>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <button class="chip example-chip rounded-full px-3 py-1.5 text-xs">I just did bad on a math test, what do I do?</button>
+      <button class="chip example-chip rounded-full px-3 py-1.5 text-xs">I'm scared of dogs and my sister just got one</button>
+      <button class="chip example-chip rounded-full px-3 py-1.5 text-xs">I just had my first kiss!!</button>
+      <button class="chip example-chip rounded-full px-3 py-1.5 text-xs">Me and my best friend got in a fight</button>
+    </div>
+  </section>
+
+  <!-- ============ CHAT LOG ============ -->
+  <section class="card p-5 mb-6">
+    <p class="bubbly text-xs uppercase tracking-wide text-[var(--pink-deep)] mb-3">Your conversation</p>
+    <div id="chat-log" class="space-y-3 max-h-[420px] overflow-y-auto pr-1">
+      <div class="bubble bg-[#fff8fa] border-[#ffe1ea] p-4">
+        <p class="bubbly text-sm text-[var(--berry)]">👋 Hi, I'm your Brain Buddy!</p>
+        <p class="text-sm text-[var(--ink-soft)] mt-1">
+          Type something that happened to you above, and I'll introduce you to the four
+          little friends inside your head who help you handle it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ METERS ============ -->
+  <section class="card p-5 mb-6">
+    <p class="bubbly text-xs uppercase tracking-wide text-[var(--pink-deep)] mb-3">How you're feeling, in numbers</p>
+    <div class="space-y-3">
+      <div>
+        <div class="flex justify-between text-xs font-semibold mb-1">
+          <span>😰 Worry-o-Meter</span><span id="worry-label" class="text-[var(--ink-soft)]">calm</span>
+        </div>
+        <div class="h-3 bg-[#fff0f5] rounded-full overflow-hidden border border-[#ffe1ea]">
+          <div id="worry-bar" class="h-full rounded-full transition-all duration-700" style="width:10%; background:linear-gradient(90deg,#ffb199,#ff7a5c);"></div>
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-between text-xs font-semibold mb-1">
+          <span>☀️ Happy-o-Meter</span><span id="happy-label" class="text-[var(--ink-soft)]">okay</span>
+        </div>
+        <div class="h-3 bg-[#fff0f5] rounded-full overflow-hidden border border-[#ffe1ea]">
+          <div id="happy-bar" class="h-full rounded-full transition-all duration-700" style="width:50%; background:linear-gradient(90deg,#c9b8f2,#ff9dbb);"></div>
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-between text-xs font-semibold mb-1">
+          <span>🧠 Brain Power Meter</span><span id="load-label" class="text-[var(--ink-soft)]">relaxed</span>
+        </div>
+        <div class="h-3 bg-[#fff0f5] rounded-full overflow-hidden border border-[#ffe1ea]">
+          <div id="load-bar" class="h-full rounded-full transition-all duration-700" style="width:20%; background:linear-gradient(90deg,#a7d8ff,#7ab8ff);"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPLAINERS ============ -->
+  <section class="card p-5 mb-6">
+    <details class="mb-2" open>
+      <summary class="flex items-center justify-between py-2">
+        <span class="bubbly text-sm text-[var(--berry)]">🌷 Meet the 4 Brain Buddies</span>
+        <span class="chev text-[var(--pink-deep)]">▾</span>
+      </summary>
+      <div class="pt-2 space-y-3 text-sm text-[var(--ink-soft)]">
+        <p><span class="bubbly text-[var(--ink)]">🚪 Thalamus (the Doorman)</span> — everything you see or hear walks through him first. He doesn't decide if it's good or bad, he just passes it along to the right friends.</p>
+        <p><span class="bubbly text-[var(--ink)]">💗 Amygdala (the Alarm)</span> — she reacts fast! She's the one who gets scared, excited, or upset before you even think about it.</p>
+        <p><span class="bubbly text-[var(--ink)]">📔 Hippocampus (the Memory Keeper)</span> — he flips through your memories to see if anything like this happened before, so you're not starting from scratch.</p>
+        <p><span class="bubbly text-[var(--ink)]">🌸 Prefrontal Cortex (the Wise Friend)</span> — she's calm and slow. She listens to everyone else and helps you figure out what to actually do next.</p>
+      </div>
+    </details>
+    <details>
+      <summary class="flex items-center justify-between py-2">
+        <span class="bubbly text-sm text-[var(--berry)]">🌼 How does this website work?</span>
+        <span class="chev text-[var(--pink-deep)]">▾</span>
+      </summary>
+      <div class="pt-2 text-sm text-[var(--ink-soft)] space-y-2">
+        <p>When you type a sentence, the page looks for little clue words — like "test," "dog," or "kiss" — to guess what kind of moment you're having, kind of like sorting mail into the right folder.</p>
+        <p>Then it shows you four short messages, one from each Brain Buddy, written to match that kind of moment. The meters go up or down based on those same clue words.</p>
+        <p>It's not reading your mind and it's not a real brain — it's a simple, friendly way to picture how your brain sorts a feeling into "how alarming is this," "have I felt this before," and "what should I do about it."</p>
+      </div>
+    </details>
+  </section>
+
+  <footer class="text-center text-xs text-[var(--ink-soft)] pb-6">
+    Made with 💗 to help explain big feelings. Not a substitute for talking to a
+    trusted adult, teacher, or counselor.
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* -----------------------------------------------------------------
+   * WORD CLUES — used to guess which kind of moment the person means.
+   * --------------------------------------------------------------- */
+  const CATEGORIES = [
+    { id:"school",  words:["test","exam","quiz","grade","grades","homework","school","fail","failed","failing","report","class","math","teacher"] },
+    { id:"animal",  words:["dog","dogs","puppy","puppies","spider","spiders","snake","snakes","bug","bugs","bee","bees","animal","bark","barking"] },
+    { id:"romance", words:["kiss","kissed","crush","date","boyfriend","girlfriend","love","holding","hands","valentine"] },
+    { id:"friend",  words:["friend","friends","fight","argument","ignored","left","out","mad","fought","bestie"] },
+    { id:"family",  words:["mom","dad","mother","father","parents","sister","brother","sibling","family","grounded"] },
+    { id:"win",     words:["won","win","prize","award","accepted","got","in","proud","accomplished","first","place","medal"] }
+  ];
+
+  const POSITIVE_WORDS = ["happy","excited","great","good","love","proud","glad","yay","amazing","awesome"];
+  const NEGATIVE_WORDS = ["sad","scared","afraid","nervous","worried","upset","angry","mad","terrified","bad","hate","hurt"];
+
+  /* -----------------------------------------------------------------
+   * WHAT EACH BUDDY SAYS — one script per situation. The Wise Friend
+   * (prefrontal cortex) always ends with something the person can
+   * actually try next.
+   * --------------------------------------------------------------- */
+  const SCRIPTS = {
+    school: {
+      thalamus: "Got it — I heard something about school or a test. Passing this straight to the team!",
+      amygdala: "Ugh, a bad grade feels awful in the moment. My alarm's going off a little, and that's okay.",
+      hippocampus: "I'm flipping through your memories... remember last time something felt hard and it worked out anyway? This is a tough page, but not a new one.",
+      pfc: "Take a deep breath — one test doesn't decide anything big. Next step: look over what tripped you up, ask your teacher one question about it, and give yourself a little credit for trying.",
+      worry:72, happy:25, load:65
+    },
+    animal: {
+      thalamus: "Alert! Something about an animal just came in. Sending it over right away.",
+      amygdala: "Eek — my alarm just jumped. That jumpy, want-to-run feeling is totally normal.",
+      hippocampus: "Checking my files... some animals are loud but gentle. It's okay to take your time getting used to one.",
+      pfc: "You don't have to pet it right away. Next step: stand a little farther back, take a few slow breaths, and ask someone you trust to introduce you to it slowly when you're ready.",
+      worry:80, happy:15, load:45
+    },
+    romance: {
+      thalamus: "Ooh, something exciting just came through! Sending it to the team fast.",
+      amygdala: "Butterflies!! That fluttery feeling is your excited alarm, not a scared one — enjoy it!",
+      hippocampus: "Bookmarking this one. This is going in your memory book as a happy new page.",
+      pfc: "This is a big, exciting moment! Next step: let yourself enjoy it, and maybe tell a friend who'll be happy for you too.",
+      worry:12, happy:92, load:35
+    },
+    friend: {
+      thalamus: "Heard you — something happened with a friend. Sending it to the team.",
+      amygdala: "That stings. Fights with people we care about can feel really heavy.",
+      hippocampus: "Looking back... friendships usually have bumps like this, and most of the time they're fixable.",
+      pfc: "Feelings first, fixing second. Next step: once you're both calm, try saying how you felt using 'I felt...' instead of 'you always...' — it tends to go a lot better.",
+      worry:65, happy:22, load:60
+    },
+    family: {
+      thalamus: "Got a family-related moment here. Routing it through now.",
+      amygdala: "Family stuff can hit different — it makes sense if this feels like a lot right now.",
+      hippocampus: "I remember family things tend to blow over more than they feel like they will in the moment.",
+      pfc: "Next step: give it a little space if things are tense, then find a calm moment to talk it through with them.",
+      worry:55, happy:40, load:55
+    },
+    win: {
+      thalamus: "Yes! Good news just came through — sending it to the team right away!",
+      amygdala: "I am SO excited right now, this is amazing!!",
+      hippocampus: "Definitely saving this one — this is a proud moment worth remembering.",
+      pfc: "You earned this! Next step: take a second to actually feel proud instead of rushing past it — you worked for this.",
+      worry:8, happy:96, load:38
+    },
+    generic_positive: {
+      thalamus: "Something good just came in! Sending it over.",
+      amygdala: "I like this feeling! Things feel light and good right now.",
+      hippocampus: "Saving this as a happy memory for later.",
+      pfc: "Enjoy this moment — next step: notice what made it feel good, so you know how to find that feeling again.",
+      worry:15, happy:80, load:35
+    },
+    generic_negative: {
+      thalamus: "Something tough just came through. Sending it to the team gently.",
+      amygdala: "That doesn't feel great, and it's okay to feel that.",
+      hippocampus: "Checking my files for anything similar... hard moments like this have passed before.",
+      pfc: "Next step: take a slow breath, and if it still feels big afterward, tell a trusted adult what's going on.",
+      worry:68, happy:18, load:55
+    },
+    generic_neutral: {
+      thalamus: "Message received! Sending it along to the team.",
+      amygdala: "Nothing alarming here — feeling pretty steady.",
+      hippocampus: "Filing this one away, nothing urgent to flag.",
+      pfc: "Next step: whatever this is, you've got this — one step at a time.",
+      worry:28, happy:52, load:38
+    }
+  };
+
+  const AGENT_META = {
+    thalamus:    { name:"Thalamus, the Doorman",     emoji:"🚪", color:"var(--thalamus)" },
+    amygdala:    { name:"Amygdala, the Alarm",        emoji:"💗", color:"var(--amygdala)" },
+    hippocampus: { name:"Hippocampus, the Memory Keeper", emoji:"📔", color:"var(--hippocampus)" },
+    pfc:         { name:"Prefrontal Cortex, the Wise Friend", emoji:"🌸", color:"var(--pfc)" }
+  };
+
+  let busy = false;
+
+  function tokenize(text){
+    return text.toLowerCase().replace(/[^a-z0-9'\s]/g," ").split(/\s+/).filter(Boolean);
+  }
+
+  function detectCategory(tokens){
+    for (const cat of CATEGORIES){
+      if (tokens.some(t => cat.words.includes(t))) return cat.id;
+    }
+    const pos = tokens.filter(t => POSITIVE_WORDS.includes(t)).length;
+    const neg = tokens.filter(t => NEGATIVE_WORDS.includes(t)).length;
+    if (pos > neg) return "generic_positive";
+    if (neg > pos) return "generic_negative";
+    return "generic_neutral";
+  }
+
+  function wait(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+  function jitter(n){
+    return Math.max(0, Math.min(100, n + Math.round((Math.random() - 0.5) * 10)));
+  }
+
+  function setMeters(worry, happy, load){
+    document.getElementById("worry-bar").style.width = worry + "%";
+    document.getElementById("happy-bar").style.width = happy + "%";
+    document.getElementById("load-bar").style.width = load + "%";
+    document.getElementById("worry-label").textContent = worry > 60 ? "pretty worried" : worry > 30 ? "a little nervous" : "calm";
+    document.getElementById("happy-label").textContent = happy > 70 ? "so happy!" : happy > 40 ? "doing okay" : "kind of down";
+    document.getElementById("load-label").textContent = load > 60 ? "thinking hard" : load > 30 ? "working on it" : "relaxed";
+  }
+
+  function addBubble(agentKey, text){
+    const meta = AGENT_META[agentKey];
+    const log = document.getElementById("chat-log");
+    const bubble = document.createElement("div");
+    bubble.className = "bubble p-4";
+    bubble.style.background = "#fff";
+    bubble.style.borderColor = meta.color;
+    bubble.innerHTML = `
+      <p class="bubbly text-xs" style="color:${meta.color.startsWith('var') ? '' : meta.color}; color:${meta.color};">${meta.emoji} ${meta.name}</p>
+      <p class="text-sm text-[var(--ink)] mt-1 leading-relaxed">${text}</p>`;
+    log.appendChild(bubble);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function pulseBrain(color){
+    const buddy = document.getElementById("brain-buddy");
+    buddy.style.borderColor = color;
+    buddy.style.boxShadow = `0 0 24px ${color}`;
+  }
+
+  function resetBrain(){
+    const buddy = document.getElementById("brain-buddy");
+    buddy.style.borderColor = "#ffd6e4";
+    buddy.style.boxShadow = "none";
+  }
+
+  async function handleFeeling(text){
+    if (busy || !text.trim()) return;
+    busy = true;
+    document.getElementById("send-btn").disabled = true;
+    document.getElementById("chat-log").innerHTML = "";
+
+    const tokens = tokenize(text);
+    const catId = detectCategory(tokens);
+    const script = SCRIPTS[catId];
+    const status = document.getElementById("status-line");
+
+    const userBubble = document.createElement("div");
+    userBubble.className = "bubble p-3 ml-auto max-w-[85%]";
+    userBubble.style.background = "#fff0f5";
+    userBubble.style.borderColor = "#ffd6e4";
+    userBubble.innerHTML = `<p class="text-sm text-[var(--ink)]">${escapeHtml(text)}</p>`;
+    document.getElementById("chat-log").appendChild(userBubble);
+
+    status.textContent = "🚪 the doorman is passing this along...";
+    pulseBrain("var(--thalamus)");
+    await wait(500);
+    addBubble("thalamus", script.thalamus);
+
+    await wait(1100);
+    status.textContent = "💗 the alarm and 📔 the memory keeper are talking it over...";
+    pulseBrain("var(--amygdala)");
+    addBubble("amygdala", script.amygdala);
+
+    await wait(900);
+    pulseBrain("var(--hippocampus)");
+    addBubble("hippocampus", script.hippocampus);
+
+    await wait(1100);
+    status.textContent = "🌸 the wise friend is figuring out what's next...";
+    pulseBrain("var(--pfc)");
+    addBubble("pfc", script.pfc);
+
+    await wait(600);
+    setMeters(jitter(script.worry), jitter(script.happy), jitter(script.load));
+    status.textContent = "🌱 all done — type another feeling anytime!";
+    resetBrain();
+
+    busy = false;
+    document.getElementById("send-btn").disabled = false;
+  }
+
+  function escapeHtml(str){
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  const input = document.getElementById("feeling-input");
+  const btn = document.getElementById("send-btn");
+
+  function submit(){
+    const val = input.value.trim();
+    if (!val) return;
+    handleFeeling(val);
+    input.value = "";
+  }
+
+  btn.addEventListener("click", submit);
+  input.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
+
+  document.querySelectorAll(".example-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      input.value = chip.textContent;
+      submit();
+    });
+  });
+})();
+</script>
+</body>
+</html>
